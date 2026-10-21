@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../routes/app_routes.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -223,6 +225,8 @@ class _Sidebar extends StatelessWidget {
               itemCount: navLabels.length,
               itemBuilder: (BuildContext context, int index) {
                 final bool selected = index == 0;
+                // The "Reports" sidebar item opens the Activity 9 Report Form.
+                final bool opensReportForm = navLabels[index] == 'Reports';
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
@@ -231,7 +235,10 @@ class _Sidebar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10),
-                      onTap: () {},
+                      onTap: opensReportForm
+                          ? () =>
+                              Navigator.pushNamed(context, AppRoutes.report)
+                          : () {},
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14, vertical: 12),
@@ -684,6 +691,9 @@ class _QuickActionsCard extends StatelessWidget {
             const SizedBox(height: 8),
             _action(Icons.upload_file_outlined, 'Upload Document'),
             const SizedBox(height: 8),
+            _action(Icons.assignment_outlined, 'File a Report',
+                () => Navigator.pushNamed(context, AppRoutes.report)),
+            const SizedBox(height: 8),
             _action(Icons.bar_chart, 'View Reports'),
           ],
         ),
@@ -691,12 +701,13 @@ class _QuickActionsCard extends StatelessWidget {
     );
   }
 
-  Widget _action(IconData icon, String label) => Material(
+  Widget _action(IconData icon, String label, [VoidCallback? onTap]) =>
+      Material(
         color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () {},
+          onTap: onTap ?? () {},
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
